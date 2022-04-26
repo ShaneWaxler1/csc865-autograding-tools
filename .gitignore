@@ -1,4 +1,3 @@
-asn1/moss/past-submissions/*
-asn2/moss/past-submissions/*
-asn3/moss/past-submissions/*
-asn5/moss/past-submissions/*
+*/moss/past-submissions/*
+
+!*/moss/past-submissions/help.txt
