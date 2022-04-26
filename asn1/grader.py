@@ -40,6 +40,19 @@ def extract_and_grade(necessary_files):
         worksheet.set_default_row(20)
         row = 0
 
+        worksheet.write(row, 0, "Full Name")
+        worksheet.write(row, 1, "Grade w/o Partial Credit")
+        worksheet.write(row, 2, "Point Distribution")
+        worksheet.write(row, 3, "Verbose Output")
+        worksheet.write(row, 4, "q1 partial credit")
+        worksheet.write(row, 5, "q2 partial credit")
+        worksheet.write(row, 6, "q3 partial credit")
+        worksheet.write(row, 7, "q4 partial credit")
+        worksheet.write(row, 8, "q5 partial credit")
+        worksheet.write(row, 9, "q8 partial credit")
+
+        row+=1
+
         student_dirs = [os.path.join(section_dir, d) for d in os.listdir(
             section_dir) if "assignsubmission" in d]
 
@@ -105,6 +118,10 @@ def extract_and_grade(necessary_files):
                         worksheet.write(row, 1, graded[0])
                         worksheet.write(row, 2, graded[1])
                         worksheet.write(row, 3, graded[2])
+                        i = 4
+                        for value in graded[3].values():
+                            worksheet.write(row, i, value)
+                            i+=1
 
                     row += 1
                 else:
@@ -130,16 +147,57 @@ def grade(locations_of_files, name, subgrader_path):
 
     # change this if not using conda
     print("Grading " + name + "...\n")
-    try:
-        score = subprocess.run('python autograder.py', shell=True,
-                               cwd=subgrader_path, stdout=subprocess.PIPE, timeout=60*3).stdout.decode('utf-8')
-    except subprocess.TimeoutExpired:
-        return ('Timeout occured after 3 minutes', '', '')
-    except Exception as e:
-        return('Error: ' + e, '', '')
+    
+    grade_wo_partial = ""
+    point_distribution = ""
+    grade_verbose = ""
 
-    # print(score[score.find('Provisional'):score.find('Your grades')])
-    return (score[score.find('Total:')+6:score.find('Your grades')], score[score.find('Provisional grades'):score.find('Your grades')], score)
+    try:
+        grade_verbose = subprocess.run('python autograder.py', 
+            shell=True, 
+            cwd=subgrader_path, 
+            stdout=subprocess.PIPE, 
+            timeout=60*3
+        ).stdout.decode('utf-8')
+        grade_wo_partial = grade_verbose[grade_verbose.find('Total:')+6:grade_verbose.find('Your grades')]
+        point_distribution = grade_verbose[grade_verbose.find('Provisional grades'):grade_verbose.find('Your grades')]
+    except subprocess.TimeoutExpired:
+        # return ('Timeout occured after 3 minutes', '', '')
+        grade_wo_partial = "Timeout occured after 3 minutes"
+    except Exception as e:
+        grade_wo_partial = "Error: " + e
+
+
+
+    commands = [
+        "python pacman.py -l bigMaze -z .5 -p SearchAgent -q", 
+        "python pacman.py -l bigMaze -p SearchAgent -a fn=bfs -z .5 -q",
+        "python pacman.py -l mediumScaryMaze -p StayWestSearchAgent -q",
+        "python pacman.py -l bigMaze -z .5 -p SearchAgent -a fn=astar,heuristic=manhattanHeuristic -q",
+        "python pacman.py -l mediumCorners -p SearchAgent -a fn=bfs,prob=CornersProblem -q",
+        "python pacman.py -l bigSearch -p ClosestDotSearchAgent -z .5 -q"
+    ]
+
+    partial_credit = dict()
+    i = 1
+    for pc_command in commands:
+        partial = ""
+        try: partial = subprocess.run(pc_command, shell=True,
+                                cwd=subgrader_path, stdout=subprocess.PIPE, timeout=10).stdout.decode('utf-8')
+        except: pass
+
+        partial_credit["q" + str(i)] = 1 if "victorious" in partial else 0
+        if i == 6: i = 8
+        else: i+=1
+            
+
+    # print(grade_verbose[grade_verbose.find('Provisional'):grade_verbose.find('Your grades')])
+    return (
+        grade_wo_partial, 
+        point_distribution, 
+        grade_verbose,
+        partial_credit
+    )
 
 
 if __name__ == "__main__":
