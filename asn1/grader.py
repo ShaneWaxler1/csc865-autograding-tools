@@ -37,7 +37,7 @@ def extract_and_grade(necessary_files):
         #     "6650")+4:section_dir.find("-")]
         section_num += 1
         worksheet = workbook.add_worksheet("section-" + str(section_num))
-
+        worksheet.set_default_row(20)
         row = 0
 
         student_dirs = [os.path.join(section_dir, d) for d in os.listdir(

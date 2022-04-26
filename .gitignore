@@ -1,5 +1,8 @@
 */moss/past-submissions/*
 */submissions/*
+*/moss/submissions/*
+*/README/
+*.xlsx
 
 !*/moss/past-submissions/help.txt
 !*/submissions/help.txt

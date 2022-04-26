@@ -29,85 +29,17 @@ def shopSmart(orderList, fruitShops):
         orderList: List of (fruit, numPound) tuples
         fruitShops: List of FruitShops
     """
-    "*** YOUR CODE HERE ***"
-    orders1 = [('apples',1.0), ('oranges',3.0)]
-    orders2 = [('apples',3.0)]
-    dir1 = {'apples': 2.0, 'oranges':1.0}
-    shop1 =  shop.FruitShop('shop1',dir1)
-    dir2 = {'apples': 1.0, 'oranges': 5.0}
-    shop2 = shop.FruitShop('shop2',dir2)
-    shops = [shop1, shop2]
-    count = 0
-    totalCost_O1S1 = 0
-    totalCost_O1S2 = 0
-    totalCost_O2S1 = 0
-    totalCost_O2S2 = 0
+    # Dictionary to hold every shop as the key
+    # and the cost of the order for the shop as the value
+    shopPrices = {}
 
-    order1_fruits = []
-    order1_count = []
-    for item in orders1:
-        order1_fruits.append(item[0])
-        order1_count.append(item[1])
-        order1_fruits = []
-    order2_fruits = []
-    order2_count = []
-    for item in orders1:
-        order2_fruits.append(item[0])
-        order2_count.append(item[1])
-    for i in orders1:
-        if i == 'apples':
-            totalCost_O1S1 = totalCost_O1S1 + order1_count[count] * 2
-        elif i == 'oranges':
-            totalCost_O1S1 = totalCost_O1S1 + order1_count[count] * 1
-        elif i == 'pears':
-            totalCost_O1S1 = totalCost_O1S1 + order1_count[count] * 0
-        elif i == 'limes':
-            totalCost_O1S1 = totalCost_O1S1 + order1_count[count] * 0
-        elif i == 'strawberries':
-            totalCost_O1S1 = totalCost_O1S1 + order1_count[count] * 0
-        count = count + 1
-    for i in orders2:
-        if i == 'apples':
-            totalCost_O2S1 = totalCost_O2S1 + order1_count[count] * 2
-        elif i == 'oranges':
-            totalCost_O2S1 = totalCost_O2S1 + order1_count[count] * 1
-        elif i == 'pears':
-            totalCost_O2S1 = totalCost_O2S1 + order1_count[count] * 0
-        elif i == 'limes':
-            totalCost_O2S1 = totalCost_O2S1 + order1_count[count] * 0
-        elif i == 'strawberries':
-            totalCost_O2S1 = totalCost_O2S1 + order1_count[count] * 0
-        count = count + 1
-    for i in orders1:
-        if i == 'apples':
-            totalCost_O1S2 = totalCost_O1S2 + order1_count[count] * 1
-        elif i == 'oranges':
-            totalCost_O1S2 = totalCost_O1S2 + order1_count[count] * 5
-        elif i == 'pears':
-            totalCost_O1S2 = totalCost_O1S2 + order1_count[count] * 0
-        elif i == 'limes':
-            totalCost_O1S2 = totalCost_O1S2 + order1_count[count] * 0
-        elif i == 'strawberries':
-            totalCost_O1S2 = totalCost_O1S2 + order1_count[count] * 0
-        count = count + 1
-    for i in orders1:
-        if i == 'apples':
-            totalCost_O2S2 = totalCost_O2S2 + order1_count[count] * 1
-        elif i == 'oranges':
-            totalCost_O2S2 = totalCost_O2S2 + order1_count[count] * 5
-        elif i == 'pears':
-            totalCost_O2S2 = totalCost_O2S2 + order1_count[count] * 0
-        elif i == 'limes':
-            totalCost_O2S2 = totalCost_O2S2 + order1_count[count] * 0
-        elif i == 'strawberries':
-            totalCost_O2S2 = totalCost_O2S2 + order1_count[count] * 0
-        count = count + 1
-    if totalCost_O1S2 > totalCost_O1S1:
-        return shop1
-    else:
-        return shop2
+    # Loop through all the fruit shops and add to the dictionary
+    # the shop and the price of the order based on the fruit shop method
+    for fruitShop in fruitShops:
+        shopPrices[fruitShop] = fruitShop.getPriceOfOrder(orderList)
 
-    
+    # Return the shop key with the lowest value
+    return min(shopPrices, key=shopPrices.get)
 
 
 if __name__ == '__main__':

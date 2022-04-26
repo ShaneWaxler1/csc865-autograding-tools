@@ -23,7 +23,6 @@ the script should produce the output:
 Cost of [('apples', 2.0), ('pears', 3.0), ('limes', 4.0)] is 12.25
 """
 from __future__ import print_function
-from itertools import count
 
 fruitPrices = {'apples': 2.00, 'oranges': 1.50, 'pears': 1.75,
                'limes': 0.75, 'strawberries': 1.00}
@@ -35,27 +34,18 @@ def buyLotsOfFruit(orderList):
 
     Returns cost of order
     """
+    # totalCost variable to hold the cost of all the orders
     totalCost = 0.0
-    "*** YOUR CODE HERE ***"
-    count = 0
-    fruit = []
-    fcount = []
-    for item in orderList:
-        fruit.append(item[0])
-        fcount.append(item[1])
-    for i in fruit:
-        if i == 'apples':
-            totalCost = totalCost + fcount[count] * 2
-        elif i == 'oranges':
-            totalCost = totalCost + fcount[count] * 1.5
-        elif i == 'pears':
-            totalCost = totalCost + fcount[count] * 1.75
-        elif i == 'limes':
-            totalCost = totalCost + fcount[count] * 0.75
-        elif i == 'strawberries':
-            totalCost = totalCost + fcount[count] * 1
-        count = count + 1
+
+    # Loop through all fruits in the order list
+    for fruit in orderList:
+        # Check if the fruit exists in the shop
+        if fruit[0] in fruitPrices:
+            # Add to the totalCost the cost of the fruit times the numPounds wanted
+            totalCost += (fruitPrices[fruit[0]] * fruit[1])
+
     return totalCost
+
 
 # Main Method
 if __name__ == '__main__':

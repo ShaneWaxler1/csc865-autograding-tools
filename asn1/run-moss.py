@@ -51,14 +51,24 @@ def run_moss():
     print()
     print("Report Url: " + url)
 
-    os.makedirs(os.path.join(path_to_moss, "report"), exist_ok=True)
 
-    m.saveWebPage(url, "moss/report.html")
+    """
+    Uncomment the next three lines to save the entire report.
+    """
+    # os.makedirs(os.path.join(path_to_moss, "report"), exist_ok=True)
+    # m.saveWebPage(url, "moss/report.html")
+    # mosspy.download_report(url, "moss/searchpy-report/", connections=8, log_level=10, on_read=lambda url: print('*', end='', flush=True))
 
-    mosspy.download_report(url, "moss/searchpy-report/", connections=8, log_level=10, on_read=lambda url: print('*', end='', flush=True))
+    """
+    Experimental:
+    Uncomment this only if you've uncommented the last three lines.
+    
+    The code appends js to the end of the html file to exclude all
+    percentages below "lowest_important_percentage".
 
-    # In the future, make this next step optional
-    # This will temporarily remove any rating lower than the threshold
+    If you don't like what it did, just go into moss/report/index.html
+    and remove the script.
+    """
     # lowest_important_percentage = "10"
     # f = open("moss/report/index.html", "a")
     
