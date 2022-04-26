@@ -1,0 +1,14 @@
+Place all student submissions here, directly as they are downloaded from iLearn.
+
+For instance, with two sections, the structure should look something like this:
+
+v asn1
+    v submissions
+        > CSC066501-S22...
+        > CSC066502-S22...
+        > subgrader
+
+The "CSC066501-S22..." should be directories, not .zip files. The submissions themselves,
+however, can and should be zip files. 
+
+Don't touch the subgrader unless something is truly broken.

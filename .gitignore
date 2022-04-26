@@ -1,3 +1,6 @@
 */moss/past-submissions/*
+*/submissions/*
 
 !*/moss/past-submissions/help.txt
+!*/submissions/help.txt
+!*/submissions/subgrader/

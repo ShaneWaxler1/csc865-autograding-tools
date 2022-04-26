@@ -143,6 +143,6 @@ def grade(locations_of_files, name, subgrader_path):
 
 
 if __name__ == "__main__":
-    extract_and_grade(['multiAgents.py'])
+    extract_and_grade(['addition.py', 'buyLotsOfFruit.py', 'shopSmart.py'])
     print("==============================================\ndone!\n==============================================")
     
