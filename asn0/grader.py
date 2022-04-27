@@ -1,10 +1,8 @@
-# from unicodedata import name
 from zipfile import ZipFile
 import os
 import shutil
 import subprocess
 import xlsxwriter
-# add command line option for entering a directory to use this on
 
 
 def find(name, path):
@@ -123,11 +121,10 @@ def extract_and_grade(necessary_files):
 
 
 def grade(locations_of_files, name, subgrader_path):
-    # print(name)
-    print(subgrader_path)
-
+    new_file_locations = []
     for floc in locations_of_files:
         shutil.copy(floc, subgrader_path)
+        new_file_locations.append(os.path.join(subgrader_path,os.path.basename(floc)))
 
     # change this if not using conda
     print("Grading " + name + "...\n")
@@ -139,7 +136,9 @@ def grade(locations_of_files, name, subgrader_path):
     except Exception as e:
         return('Error: ' + e, '', '')
 
-    # print(score[score.find('Provisional'):score.find('Your grades')])
+    for floc in new_file_locations:
+        os.unlink(floc)
+
     return (score[score.find('Total:')+6:score.find('Your grades')], score[score.find('Provisional grades'):score.find('Your grades')], score)
 
 

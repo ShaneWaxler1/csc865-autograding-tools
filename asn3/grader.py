@@ -145,8 +145,11 @@ def grade(locations_of_files, name, subgrader_path):
     # print(name)
     print(subgrader_path)
 
+    new_file_locations = []
+
     for floc in locations_of_files:
         shutil.copy(floc, subgrader_path)
+        new_file_locations.append(os.path.join(subgrader_path,os.path.basename(floc)))
 
     # change this if not using conda
     print("Grading " + name + "...\n")
@@ -169,8 +172,6 @@ def grade(locations_of_files, name, subgrader_path):
         grade_wo_partial = "Timeout occured after 3 minutes"
     except Exception as e:
         grade_wo_partial = "Error: " + e
-
-
 
     commands = [
         "python autograder.py -q q1", 
@@ -196,6 +197,8 @@ def grade(locations_of_files, name, subgrader_path):
         if i == 6: i = 8
         else: i+=1
             
+    for floc in new_file_locations:
+        os.unlink(floc)
 
     # print(grade_verbose[grade_verbose.find('Provisional'):grade_verbose.find('Your grades')])
     return (

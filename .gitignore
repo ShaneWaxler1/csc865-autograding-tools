@@ -3,6 +3,8 @@
 */moss/submissions/*
 */README/
 *.xlsx
+*.DS_Store
+
 
 !*/moss/past-submissions/help.txt
 !*/submissions/help.txt

@@ -1,4 +1,3 @@
-# from unicodedata import name
 from zipfile import ZipFile
 import os
 import shutil
@@ -38,8 +37,23 @@ def extract_and_grade(necessary_files):
         section_num += 1
         worksheet = workbook.add_worksheet("section-" + str(section_num))
         worksheet.set_default_row(20)
-        
         row = 0
+
+        worksheet.write(row, 0, "Full Name")
+        worksheet.write(row, 1, "Grade w/o Partial Credit")
+        worksheet.write(row, 2, "Point Distribution")
+        worksheet.write(row, 3, "Verbose Output")
+        worksheet.write(row, 4, "q1 partial credit")
+        worksheet.write(row, 5, "q2 partial credit")
+        worksheet.write(row, 6, "q3 partial credit")
+        worksheet.write(row, 7, "q4 partial credit")
+        worksheet.write(row, 8, "q5 partial credit")
+        worksheet.write(row, 9, "q6 partial credit")
+        worksheet.write(row, 10, "q7 partial credit")
+        worksheet.write(row, 11, "q8 partial credit")
+        worksheet.write(row, 12, "q10 partial credit")
+
+        row+=1
 
         student_dirs = [os.path.join(section_dir, d) for d in os.listdir(
             section_dir) if "assignsubmission" in d]
@@ -106,6 +120,10 @@ def extract_and_grade(necessary_files):
                         worksheet.write(row, 1, graded[0])
                         worksheet.write(row, 2, graded[1])
                         worksheet.write(row, 3, graded[2])
+                        i = 4
+                        for value in graded[3].values():
+                            worksheet.write(row, i, value)
+                            i+=1
 
                     row += 1
                 else:
@@ -126,24 +144,66 @@ def grade(locations_of_files, name, subgrader_path):
     # print(name)
     print(subgrader_path)
 
+    new_file_locations = []
+
     for floc in locations_of_files:
         shutil.copy(floc, subgrader_path)
+        new_file_locations.append(os.path.join(subgrader_path,os.path.basename(floc)))
 
     # change this if not using conda
     print("Grading " + name + "...\n")
+    
+    grade_wo_partial = ""
+    point_distribution = ""
+    grade_verbose = ""
+
     try:
-        score = subprocess.run('python autograder.py', shell=True,
-                               cwd=subgrader_path, stdout=subprocess.PIPE, timeout=60*3).stdout.decode('utf-8')
+        grade_verbose = subprocess.run('python autograder.py', 
+            shell=True, 
+            cwd=subgrader_path, 
+            stdout=subprocess.PIPE, 
+            timeout=60*3
+        ).stdout.decode('utf-8')
+        grade_wo_partial = grade_verbose[grade_verbose.find('Total:')+6:grade_verbose.find('Your grades')]
+        point_distribution = grade_verbose[grade_verbose.find('Provisional grades'):grade_verbose.find('Your grades')]
     except subprocess.TimeoutExpired:
-        return ('Timeout occured after 3 minutes', '', '')
+        # return ('Timeout occured after 3 minutes', '', '')
+        grade_wo_partial = "Timeout occured after 3 minutes"
     except Exception as e:
-        return('Error: ' + e, '', '')
+        grade_wo_partial = "Error: " + e
 
-    # print(score[score.find('Provisional'):score.find('Your grades')])
-    return (score[score.find('Total:')+6:score.find('Your grades')], score[score.find('Provisional grades'):score.find('Your grades')], score)
+    # Put partial credit commands here
+    commands = [
+        
+    ]
 
+    partial_credit = dict()
+    i = 1
+    for pc_command in commands:
+        partial = ""
+        try: partial = subprocess.run(pc_command, shell=True,
+                                cwd=subgrader_path, stdout=subprocess.PIPE, timeout=30).stdout.decode('utf-8')
+        except: pass
+
+        # Change "PASS" to whatever unique substring from the cmd output
+        # proves that the student should get partial credit.
+        partial_credit["q" + str(i)] = 1 if "PASS" in partial else 0
+        if i == 6: i = 8
+        else: i+=1
+            
+    for floc in new_file_locations:
+        os.unlink(floc)
+
+    # print(grade_verbose[grade_verbose.find('Provisional'):grade_verbose.find('Your grades')])
+    return (
+        grade_wo_partial, 
+        point_distribution, 
+        grade_verbose,
+        partial_credit
+    )
 
 if __name__ == "__main__":
-    extract_and_grade(['multiAgents.py'])
+    # Pass relevant filenames to extract_and_grade
+    extract_and_grade([])
     print("==============================================\ndone!\n==============================================")
     

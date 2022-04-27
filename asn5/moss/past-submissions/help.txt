@@ -1,0 +1,3 @@
+Place all past submissions files/folders from Dropbox in this directory.
+
+The structure doesn't matter much.
