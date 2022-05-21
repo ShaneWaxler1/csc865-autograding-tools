@@ -30,31 +30,34 @@ def run_moss():
 
     m.setNumberOfMatchingFiles(200)
 
-    m.addBaseFile("moss/skeleton/multiAgents.py")
-    m.addFilesByWildcard("moss/submissions/*/multiAgents.py")
-    m.addFilesByWildcard("moss/past-submissions/*/multiAgents.py")
+    m.addBaseFile("moss/skeleton/analysis.py")
+    m.addFilesByWildcard("moss/submissions/*/qlearningAgents.py")
+    m.addFilesByWildcard("moss/past-submissions/*/valueIterationAgents.py")
     
     s = "moss/past-submissions"
-    e = "/multiAgents.py"
+    e1 = "/analysis.py"
+    e2 = "/qlearningAgents.py"
+    e3 = "/valueIterationAgents.py"
     for _ in range(get_depth(path_to_past_submissions)):
         s += "/*"
-        m.addFilesByWildcard(s+e)
+        m.addFilesByWildcard(s+e1)
+        m.addFilesByWildcard(s+e2)
+        m.addFilesByWildcard(s+e3)
 
     m.setIgnoreLimit(60)
 
-    # print(len(m.files))
-    # return 0    
     print("sending...")
     url = m.send(lambda file_path, display_name: print('*', end='', flush=True))
     
     print()
     print("Report Url: " + url)
 
-    os.makedirs(os.path.join(path_to_moss, "report"), exist_ok=True)
+    # os.makedirs(os.path.join(path_to_moss, "report"), exist_ok=True)
 
-    m.saveWebPage(url, "moss/report.html")
+    # m.saveWebPage(url, "moss/report.html")
 
-    mosspy.download_report(url, "moss/searchpy-report/", connections=8, log_level=10, on_read=lambda url: print('*', end='', flush=True))
+    # mosspy.download_report(url, "moss/searchpy-report/", connections=8, log_level=10, on_read=lambda url: print('*', end='', flush=True))
+
 
     # In the future, make this next step optional
     # This will temporarily remove any rating lower than the threshold

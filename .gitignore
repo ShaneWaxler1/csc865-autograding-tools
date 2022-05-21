@@ -1,6 +1,7 @@
 */moss/past-submissions/*
 */submissions/*
 */moss/submissions/*
+/asn4/*
 */README/
 *.xlsx
 *.DS_Store
@@ -9,3 +10,4 @@
 !*/moss/past-submissions/help.txt
 !*/submissions/help.txt
 !*/submissions/subgrader/
+!/asn4/help.txt

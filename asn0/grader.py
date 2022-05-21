@@ -126,7 +126,6 @@ def grade(locations_of_files, name, subgrader_path):
         shutil.copy(floc, subgrader_path)
         new_file_locations.append(os.path.join(subgrader_path,os.path.basename(floc)))
 
-    # change this if not using conda
     print("Grading " + name + "...\n")
     try:
         score = subprocess.run('python autograder.py', shell=True,

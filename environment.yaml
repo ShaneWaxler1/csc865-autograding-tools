@@ -1,0 +1,4 @@
+name: csc665
+channels:
+  - conda-forge
+prefix: /Users/shanewaxler/miniforge3/envs/csc665

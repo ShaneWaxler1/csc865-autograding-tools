@@ -1,10 +1,8 @@
-# from unicodedata import name
 from zipfile import ZipFile
 import os
 import shutil
 import subprocess
 import xlsxwriter
-# add command line option for entering a directory to use this on
 
 
 def find(name, path):
@@ -151,7 +149,6 @@ def grade(locations_of_files, name, subgrader_path):
         shutil.copy(floc, subgrader_path)
         new_file_locations.append(os.path.join(subgrader_path,os.path.basename(floc)))
 
-    # change this if not using conda
     print("Grading " + name + "...\n")
     
     grade_wo_partial = ""
